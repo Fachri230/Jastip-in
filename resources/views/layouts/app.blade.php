@@ -13,7 +13,7 @@
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
     
    
-   <nav class="bg-gray-300 border-b border-emerald-400 text-black">
+   <nav class="bg-green-200 border-b border-emerald-400 text-gray">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">

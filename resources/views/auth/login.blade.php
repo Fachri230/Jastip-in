@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex min-h-screen items-center justify-center bg-sky-300 px-4 py-12 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+<div class="flex min-h-screen items-center justify-center bg-gray-200 px-4 py-12 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md space-y-6 bg-white p-8 rounded-xl shadow-md border border-emerald-400">
         <div>
-            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            <h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-emerald-600">
                 {{ __('Login') }}
             </h2>
         </div>
 
-        <form class="mt-8 space-y-6" method="POST" action="{{ route('login') }}">
+        <form class="space-y-5" method="POST" action="{{ route('login') }}">
             @csrf
 
            
@@ -48,8 +48,8 @@
                 @enderror
             </div>
 
-          
-            <div class="flex items-center justify-between">
+            
+            <div class="flex items-center justify-between pt-1">
                 <div class="flex items-center">
                     <input id="remember" name="remember" type="checkbox" {{ old('remember') ? 'checked' : '' }}
                         class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600">
@@ -67,8 +67,8 @@
                 @endif
             </div>
 
-           
-            <div>
+            
+            <div class="pt-2">
                 <button type="submit" 
                     class="flex w-full justify-center rounded-md bg-emerald-600 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-colors duration-200">
                     {{ __('Login') }}
@@ -77,7 +77,6 @@
         </form>
     </div>
 </div>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
