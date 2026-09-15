@@ -23,29 +23,31 @@
 
                 </div>
                 <div class="flex items-center space-x-4 text-sm font-medium text-gray-600">
-                    @guest
-                        @if (Route::has('login'))
-                            <a href="{{ route('login') }}" class="hover:text-emerald-600 transition">{{ __('Login') }}</a>
-                        @endif
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="hover:text-emerald-600 transition">{{ __('Register') }}</a>
-                        @endif
-                    @else
-                        <span class="text-gray-700">{{ Auth::user()->name }}</span>
-                        <a href="{{ route('logout') }}" 
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                           class="hover:text-red-600 transition">
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
-                    @endguest
-                </div>
+                @guest
+                    
+                    <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                @else
+               
+                    <span class="text-gray-700 font-semibold">{{ Auth::user()->name }}</span>
+                    
+                    
+                    <button type="button" 
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 transition duration-150 cursor-pointer">
+                        {{ __('Logout') }}
+                    </button>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+                @endguest
+            </div>
+
             </div>
         </div>
     </nav>
-
+ 
     
     <main>
         @yield('content')

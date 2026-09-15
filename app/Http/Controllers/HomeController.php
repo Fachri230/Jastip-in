@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Menu;
 class HomeController extends Controller
 {
     /**
@@ -21,8 +21,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
-    }
+   public function index()
+{
+    $menus = Menu::paginate(8);
+
+        return view('siswa/menu', compact('menus'));
+}
+
 }
