@@ -131,13 +131,10 @@
         });
     </script>
 
-    <br><br><br>
-
-   <div class="flex px-9 ">
+   <div>
     <div>
 
     </div>
-
    </div>
 
 </body>

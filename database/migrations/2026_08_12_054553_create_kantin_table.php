@@ -15,6 +15,7 @@ return new class extends Migration
            $table->id('id_kantin'); // PK
            $table->unsignedBigInteger('id_user'); // FK
            $table->string('nama_kantin');
+           $table->string('desc');
            $table->timestamps(); 
 
            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
