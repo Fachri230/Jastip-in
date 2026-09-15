@@ -1,31 +1,12 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function() {
-    return view('/siswa/index');
-});
+Route::get('/menu', [ShopController::class, 'index'])
+    ->name('menu');
 
-Route::prefix('siswa')->group(function() {
-    Route::get('/', function() {
-        return view('/siswa/index');
-    })->name('siswa');
-
-    Route::get('/siswa.menu', function() {
-        return view('/siswa/menu');
-    })->name('menu');
-
-    Route::get('/siswa.history', function() {
-        return view('/siswa/history');
-    })->name('history');
-
-    Route::get('/cart', function() {
-        return view('/siswa/cart');
-    })->name('cart');
-
-
-});
 
 Auth::routes();
 
