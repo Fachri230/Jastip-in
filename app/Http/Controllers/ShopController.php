@@ -10,11 +10,22 @@ class ShopController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function filter(Request $request)
     {
-        $menus = Menu::paginate(8);
 
-        return view('siswa/menu', compact('menus'));
+        $kategori = $request->kategori;
+
+        if($kategori) {
+            $menus = Menu::where('kategori', $kategori)->paginate(8);
+            
+        } else {
+            
+            $menus = Menu::paginate(8);
+
+        }
+
+
+        return view('siswa.menu', compact('menus'));
     }
 
     /**
@@ -22,7 +33,7 @@ class ShopController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**

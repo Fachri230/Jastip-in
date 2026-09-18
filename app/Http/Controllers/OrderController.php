@@ -56,12 +56,11 @@ class OrderController extends Controller
         ];
     }
 
-    // Dipanggil saat buka /pesanan — kirim daftar pesanan ke tampilan
+ 
     public function index(Request $request)
     {
         $orders = $this->dummyOrders();
 
-        // Filter kalau ada tab status yang diklik, misal ?status=diproses
         if ($request->filled('status') && $request->status !== 'semua') {
             $orders = array_values(array_filter($orders, fn($o) => $o['status'] === $request->status));
         }
@@ -72,7 +71,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // Dipanggil saat baris tabel diklik — kirim 1 data pesanan sebagai JSON
     public function show($id)
     {
         $order = collect($this->dummyOrders())->firstWhere('id', (int) $id);

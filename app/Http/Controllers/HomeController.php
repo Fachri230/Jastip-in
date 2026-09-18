@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 class HomeController extends Controller
@@ -25,7 +26,14 @@ class HomeController extends Controller
 {
     $menus = Menu::paginate(8);
 
-        return view('siswa/menu', compact('menus'));
+     $user = Auth::User();
+
+
+        return view('siswa.index', compact('user', 'menus'));
+}
+
+public function edit() {
+    
 }
 
 }

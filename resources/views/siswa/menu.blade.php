@@ -16,7 +16,7 @@
 
         <div class="flex items-center">
 
-            <button class="p-2 rounded-lg hover:bg-green-500 transition delay-75">
+            <button class="p-2 rounded-lg hover:bg-green-700 transition delay-75 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-menu" id="burger">
@@ -26,7 +26,7 @@
                 </svg>
             </button>
 
-            
+
         </div>
 
 
@@ -44,7 +44,7 @@
 
                 <input type="text" placeholder="Cari..." class="w-full pl-10 pr-4 py-1 bg-gray-100 rounded-md
                        outline-none text-sm">
-                       
+
             </div>
 
 
@@ -52,7 +52,7 @@
 
         <div class="flex items-center gap-2">
             <!-- Filter -->
-            <button class="p-2 rounded-xl hover:bg-green-500 transition delay-75">
+            <button id="filterButton" type="button" class="p-2 rounded-xl hover:bg-green-700 transition delay-75">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-funnel">
@@ -61,7 +61,7 @@
             </button>
 
             <!-- Keranjang :v -->
-            <a class="p-2 rounded-xl hover:bg-green-500 transition delay-75" href="">
+            <a class="p-2 rounded-xl hover:bg-green-700 transition delay-75" href="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-shopping-cart-plus">
@@ -75,7 +75,7 @@
                 </svg>
             </a>
             <!-- Riwayat -->
-            <a class="p-2 rounded-xl hover:bg-green-500 transition delay-75" href="">
+            <a class="p-2 rounded-xl hover:bg-green-700 transition delay-75" href="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-rotate-ccw-clock">
@@ -93,8 +93,8 @@
     </nav>
 
 
-    <aside id="sidebar" class="fixed top-12 left-0 w-56 h-[calc(100vh-3rem)]
-           bg-green-700 text-white
+    <aside id="sidebar" class="fixed top-12 left-0 w-56 h-screen
+           bg-green-600 text-white
            transform -translate-x-full
            transition-transform duration-300 ease-in-out
            z-50">
@@ -107,44 +107,62 @@
 
             <ul class="space-y-2">
 
-                <li>
-                    <a href="" class="block p-3 rounded-lg hover:bg-green-600">
+                <li class="block p-3 rounded-lg hover:bg-green-700 transition duration-150 cursor-pointer">
+                    <a href="/dashboard">
                         Home
                     </a>
                 </li>
 
-                <li>
-                    <a href="#" class="block p-3 rounded-lg hover:bg-green-600">
-                        About
-                    </a>
-                </li>
+                <ul class="block p-3 rounded-lg hover:bg-green-700">
+                    <a href="/pesanan">Pesanan</a>
+                </ul>
 
-                <li>
-                    <a href="#" class="block p-3 rounded-lg hover:bg-green-600">
-                        Projects
-                    </a>
-                </li>
 
-                <li>
-                    
-                <button type="button" 
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                         class="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600 transition duration-150 cursor-pointer">
-                             {{ __('Logout') }}
-                </button>
+                <ul class="block p-3 mb-35 rounded-lg hover:bg-green-700">
+                    <a href="/Riwayat">Riwayat</a>
+                </ul>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                    @csrf
-                </form>
 
-                </li>
+                <ul class="block p-3 rounded-lg hover:bg-green-700">
+
+                    <button type="button"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </button>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+
+                </ul>
 
             </ul>
 
 
+
+
         </div>
 
+
     </aside>
+
+
+    <!-- Dropdown -->
+    <div id="filterDropdown"
+        class="hidden absolute right-6 mt-12 w-52 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+
+        <h3 class="font-semibold text-gray-800 mb-3">
+            Filter Menu
+        </h3>
+
+        <a href="{{ route('menu') }}">Semua</a>
+        <a href="{{ route('menu', ['kategori' => 'makanan']) }}">Makanan</a>
+        <a href="{{ route('menu', ['kategori' => 'minuman']) }}">Minuman</a>
+
+    </div>
+
+    </div>
+
 
     <script>
         const menuButton = document.getElementById('burger');
@@ -152,6 +170,14 @@
 
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
+        });
+
+
+        const filterButton = document.getElementById('filterButton');
+        const filterDropdown = document.getElementById('filterDropdown');
+
+        filterButton.addEventListener('click', () => {
+            filterDropdown.classList.toggle('hidden');
         });
     </script>
 
@@ -161,17 +187,16 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-4 gap-4">
 
             @foreach ($menus as $m)
-            
+
 
                 <div class="bg-white rounded-2xl overflow-hidden shadow-md
-                                        hover:shadow-xl hover:-translate-y-1
-                                        transition duration-300">
+                                                    hover:shadow-xl hover:-translate-y-1
+                                                    transition duration-300">
 
-                                        
+
                     <div class="h-48 bg-gray-200 overflow-hidden">
 
-                        <img src="{{ asset($m->img) }}" alt="{{ $m->nm_produk }}"
-                            class="w-full h-full object-cover">
+                        <img src="{{ asset($m->img) }}" alt="{{ $m->nm_produk }}" class="w-full h-full object-cover">
 
                     </div>
 
@@ -185,7 +210,11 @@
                                     {{ $m->nm_produk }}
                                 </h2>
 
-                                <p class="text-sm text-gray-500 mt-1">
+                                <p class="text-xs font-semibold text-gray-700 ">
+                                    {{ $m->kategori }}
+                                </p>
+
+                                <p class="text-sm text-gray-400 mt-1">
                                     {{ $m->desc }}
                                 </p>
                             </div>
@@ -200,9 +229,9 @@
                             </span>
 
                             <button class="w-9 h-9 flex items-center justify-center
-                                                   rounded-xl bg-green-600 text-white
-                                                   hover:bg-green-700
-                                                   transition duration-200">
+                                                               rounded-xl bg-green-600 text-white
+                                                               hover:bg-green-700
+                                                               transition duration-200">
 
                                 <span class="text-xl">+</span>
 
