@@ -11,6 +11,7 @@ Route::get('/dashboard', [HomeController::class, 'index'])
 
 
 Route::get('/menu', [ShopController::class, 'filter'])->name('menu');
+Route::get('/menu/search', [ShopController::class, 'search'])->name('search');
 
 
 Route::get('/pesanan', function() {

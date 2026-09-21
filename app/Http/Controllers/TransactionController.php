@@ -3,47 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Menu;
 
-class ShopController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function filter(Request $request)
+    public function index()
     {
-
-        $kategori = $request->kategori;
-
-        if ($kategori) {
-            $menus = Menu::where('kategori', $kategori)->paginate(8);
-
-        } else {
-
-            $menus = Menu::paginate(6);
-
-        }
-
-
-        return view('siswa.menu', compact('menus'));
+        //
     }
 
-    public function search(Request $request)
-    {
-
-        $cari = $request->cari;
-
-        $menus = Menu::where('nm_produk', 'LIKE', '%' . $cari . '%')
-            ->paginate(6);
-
-        return view('siswa.menu', compact('menus'));
-
-    }
-
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-
+        //
     }
 
     /**

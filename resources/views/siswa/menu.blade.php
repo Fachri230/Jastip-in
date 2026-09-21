@@ -42,8 +42,14 @@
                     <circle cx="11" cy="11" r="8" />
                 </svg>
 
-                <input type="text" placeholder="Cari..." class="w-full pl-10 pr-4 py-1 bg-gray-100 rounded-md
-                       outline-none text-sm">
+
+                    <form action="{{ route('search') }}" method="GET">
+
+                        <input type="text" name="cari" placeholder="Cari..." class="w-full pl-10 pr-4 py-1 bg-gray-100 rounded-md
+                               outline-none text-sm">
+
+                    </form>
+
 
             </div>
 
@@ -190,8 +196,8 @@
 
 
                 <div class="bg-white rounded-2xl overflow-hidden shadow-md
-                                                    hover:shadow-xl hover:-translate-y-1
-                                                    transition duration-300">
+                                                                    hover:shadow-xl hover:-translate-y-1
+                                                                    transition duration-300">
 
 
                     <div class="h-48 bg-gray-200 overflow-hidden">
@@ -214,7 +220,7 @@
                                     {{ $m->kategori }}
                                 </p>
 
-                                <p class="text-sm text-gray-400 mt-1">
+                                <p class="text-sm text-gray-400 mt-1 line-clamp-1">
                                     {{ $m->desc }}
                                 </p>
                             </div>
@@ -228,15 +234,18 @@
                                 Rp {{ number_format($m->harga, 0, ',', '.') }}
                             </span>
 
-                            <button class="w-9 h-9 flex items-center justify-center
-                                                               rounded-xl bg-green-600 text-white
-                                                               hover:bg-green-700
-                                                               transition duration-200">
+                            <form action="" method="POST">
 
-                                <span class="text-xl">+</span>
+                                <button type="submit" class="w-9 h-9 flex items-center justify-center
+                                                                               rounded-xl bg-green-600 text-white
+                                                                               hover:bg-green-700
+                                                                               transition duration-200">
 
-                            </button>
+                                    <span class="text-xl">+</span>
 
+                                </button>
+
+                            </form>
 
                         </div>
 
