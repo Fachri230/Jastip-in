@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-     protected $table = 'produk';
+    protected $table = 'produk';
+
+    protected $primaryKey = 'id_produk';
+
     protected $fillable = [
-        'id_produk',
+        'id_user',
         'img',
         'nm_produk',
         'harga',
@@ -17,3 +20,4 @@ class Menu extends Model
         'stok',
     ];
 }
+
