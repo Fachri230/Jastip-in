@@ -26,7 +26,17 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+   
+public function redirectTo()
+{
+    if (auth()->user()->role === 'seller') {
+        return route('penjual.produk.index');
+    }
+
+   
+    return '/home';
+}
+
 
     /**
      * Create a new controller instance.
@@ -42,4 +52,16 @@ class LoginController extends Controller
 {
     return redirect()->route('login'); // Mengarahkan paksa ke halaman login setelah logout
 }
+
+protected function authenticated(\Illuminate\Http\Request $request, $user)
+{
+    
+    if ($user->role === 'seller') {
+        return redirect()->route('penjual.produk.index');
+    }
+
+    
+    return redirect('/home');
+}
+
 }

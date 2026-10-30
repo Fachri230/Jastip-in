@@ -1,180 +1,80 @@
-```html
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Produk Penjual</title>
+@extends('layouts.app')
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 30px;
-        }
+@section('content')
+<div class="min-h-screen bg-[#d1fae5]/30 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header Utama -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Katalog Produk Saya</h1>
+                <p class="text-sm text-gray-500 mt-1">Kelola daftar menu makanan, minuman, harga, dan update ketersediaan stok jastip.</p>
+            </div>
+            <a href="{{ route('penjual.produk.create') }}" class="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition duration-200">
+                + Tambah Produk Baru
+            </a>
+        </div>
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
-
-        .tambah {
-            display: inline-block;
-            background: #198754;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-bottom: 20px;
-        }
-
-        .sukses {
-            background: #d1e7dd;
-            color: #0f5132;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
-        .error {
-            color: #842029;
-            background: #f8d7da;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background: #198754;
-            color: white;
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            background: none;
-            color: #dc3545;
-        }
-
-        .edit {
-            color: #0d6efd;
-        }
-
-        .kosong {
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Daftar Produk Saya</h2>
-
-        @if (session('success'))
-            <div class="sukses">
-                {{ session('success') }}
+        @if(session('success'))
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl mb-6 text-sm font-medium">
+                ✅ {{ session('success') }}
             </div>
         @endif
 
-        @if ($errors->any())
-            <div class="error">
-                Ada data yang belum valid.
+        <!-- Tabel Data -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider">
+                            <th class="p-4 text-center">No.</th>
+                            <th class="p-4">Gambar</th>
+                            <th class="p-4">Nama Produk</th>
+                            <th class="p-4">Kategori</th>
+                            <th class="p-4">Stok</th>
+                            <th class="p-4">Harga Satuan</th>
+                            <th class="p-4 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                        @forelse ($produks as $index => $produk)
+                        <tr class="hover:bg-gray-50/70 transition">
+                            <td class="p-4 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
+                            <td class="p-4">
+                                @if ($produk->img)
+                                    <img src="{{ Str::startsWith($produk->img, 'http') ? $produk->img : Storage::url($produk->img) }}" 
+                                         alt="{{ $produk->nama_produk }}" class="w-12 h-12 object-cover rounded-lg border border-gray-100 shadow-sm">
+                                @else
+                                    <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-[10px] text-gray-400 font-medium">No Img</div>
+                                @endif
+                            </td>
+                            <td class="p-4 font-semibold text-gray-900">{{ $produk->nama_produk }}</td>
+                            <td class="p-4">
+                                <span class="px-2.5 py-1 rounded-md text-xs font-medium {{ $produk->kategori === 'Makanan' ? 'bg-orange-50 text-orange-700 border border-orange-100' : 'bg-blue-50 text-blue-700 border border-blue-100' }}">
+                                    {{ $produk->kategori }}
+                                </span>
+                            </td>
+                            <td class="p-4 font-medium text-gray-600">{{ $produk->stok }} Pcs</td>
+                            <td class="p-4 font-bold text-emerald-600">Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
+                            <td class="p-4 text-center space-x-3 font-medium">
+                                <a href="{{ route('penjual.produk.edit', $produk->id_produk) }}" class="text-emerald-600 hover:text-emerald-700 transition">Edit</a>
+                                <form action="{{ route('penjual.produk.destroy', $produk->id_produk) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                    @csrf 
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-600 transition cursor-pointer">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="p-12 text-center text-gray-400 font-medium">Belum ada produk jastip yang didaftarkan.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        @endif
+        </div>
 
-        <a href="{{ route('penjual.produk.create') }}" class="tambah">
-            + Tambah Produk
-        </a>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Gambar</th>
-                    <th>Nama Produk</th>
-                    <th>Harga</th>
-                    <th>Deskripsi</th>
-                    <th>Kategori</th>
-                    <th>Stok</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse ($produks as $produk)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-
-                        <td>
-                            @if ($produk->img)
-                                <img
-                                    src="{{ $produk->img }}"
-                                    alt="{{ $produk->nm_produk }}"
-                                    width="60"
-                                >
-                            @else
-                                -
-                            @endif
-                        </td>
-
-                        <td>{{ $produk->nm_produk }}</td>
-
-                        <td>
-                            Rp {{ number_format($produk->harga, 0, ',', '.') }}
-                        </td>
-
-                        <td>{{ $produk->desc ?: '-' }}</td>
-
-                        <td>{{ $produk->kategori }}</td>
-
-                        <td>{{ $produk->stok }}</td>
-
-                        <td>
-                            <a
-                                href="{{ route('penjual.produk.edit', $produk->id_produk) }}"
-                                class="edit"
-                            >
-                                Edit
-                            </a>
-
-                            <form
-                                action="{{ route('penjual.produk.destroy', $produk->id_produk) }}"
-                                method="POST"
-                                style="display:inline"
-                                onsubmit="return confirm('Yakin ingin menghapus produk ini?')"
-                            >
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" class="kosong">
-                            Belum ada produk. Silakan tambah produk terlebih dahulu.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
     </div>
-</body>
-</html>
-```
+</div>
+@endsection

@@ -4,111 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PenjualProdukController extends Controller
 {
-    private function penjualId()
-    {
-        abort_unless(Auth::check(), 403);
-
-        abort_unless(
-            Auth::user()->role === 'penjual',
-            403,
-            'Halaman ini hanya untuk penjual.'
-        );
-
-        return Auth::id();
-    }
-
     public function index()
     {
-        $idUser = $this->penjualId();
-
-        $produks = Menu::where('id_user', $idUser)
-            ->latest()
-            ->get();
+        $produks = Menu::latest()->get();
 
         return view('penjual.produk', compact('produks'));
     }
 
     public function create()
     {
-        $this->penjualId();
-
         return view('penjual.tambah-produk');
     }
 
     public function store(Request $request)
     {
-        $idUser = $this->penjualId();
-
         $data = $request->validate([
             'nm_produk' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'desc' => 'nullable|string',
-            'kategori' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'img' => 'nullable|string|max:255',
+            'kategori'  => 'required|string',
+            'stok'      => 'required|integer|min:0',
+            'harga'     => 'required|integer|min:0',
+            'desc'      => 'nullable|string',
+            'img'       => 'nullable|string|max:2048',
         ]);
 
-        $data['id_user'] = $idUser;
+        $data['id_user'] = auth()->id();
 
         Menu::create($data);
 
-        return redirect()
-            ->route('penjual.produk.index')
-            ->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
-        $idUser = $this->penjualId();
-
-        $produk = Menu::where('id_user', $idUser)
-            ->where('id_produk', $id)
-            ->firstOrFail();
+        $produk = Menu::findOrFail($id);
 
         return view('penjual.edit-produk', compact('produk'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $idUser = $this->penjualId();
-
-        $produk = Menu::where('id_user', $idUser)
-            ->where('id_produk', $id)
-            ->firstOrFail();
+        $produk = Menu::findOrFail($id);
 
         $data = $request->validate([
             'nm_produk' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'desc' => 'nullable|string',
-            'kategori' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'img' => 'nullable|string|max:255',
+            'kategori'  => 'required|string',
+            'stok'      => 'required|integer|min:0',
+            'harga'     => 'required|integer|min:0',
+            'desc'      => 'nullable|string',
+            'img'       => 'nullable|string|max:2048',
         ]);
 
         $produk->update($data);
 
-        return redirect()
-            ->route('penjual.produk.index')
-            ->with('success', 'Produk berhasil diperbarui.');
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $idUser = $this->penjualId();
+        $menu = Menu::findOrFail($id);
+        $menu->delete();
 
-        $produk = Menu::where('id_user', $idUser)
-            ->where('id_produk', $id)
-            ->firstOrFail();
-
-        $produk->delete();
-
-        return redirect()
-            ->route('penjual.produk.index')
-            ->with('success', 'Produk berhasil dihapus.');
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil dihapus!');
     }
 }
-
