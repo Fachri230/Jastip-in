@@ -29,14 +29,12 @@ class LoginController extends Controller
    
 public function redirectTo()
 {
-    if (auth()->user()->role === 'seller') {
-        return route('penjual.produk.index');
+    if (auth()->user()->role === 'penjual') {
+        return route('penjual.dashboard');
     }
 
-   
     return '/home';
 }
-
 
     /**
      * Create a new controller instance.
@@ -55,13 +53,10 @@ public function redirectTo()
 
 protected function authenticated(\Illuminate\Http\Request $request, $user)
 {
-    
-    if ($user->role === 'seller') {
-        return redirect()->route('penjual.produk.index');
+    if ($user->role === 'penjual') {
+        return redirect()->route('penjual.dashboard');
     }
 
-    
     return redirect('/home');
 }
-
 }
