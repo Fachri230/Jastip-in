@@ -5,6 +5,8 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PenjualProdukController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SellerRegistrationController;
+use App\Http\Controllers\Admin\StoreApprovalController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +19,7 @@ Auth::routes();
 
 // HOME
 Route::get('/home', function () {
-    if (auth()->check() && auth()->user()->role === 'penjual') {
+    if (auth()->check() && in_array(auth()->user()->role, ['penjual', 'seller'])) {
         return redirect()->route('penjual.dashboard');
     }
 
@@ -68,6 +70,13 @@ Route::post('/register/seller', [
     App\Http\Controllers\Auth\RegisterController::class,
     'register'
 ])->name('register.seller.submit');
+
+// PENDAFTARAN TOKO: form -> pengajuan -> status menunggu admin
+Route::middleware('auth')->group(function () {
+    Route::get('/become-seller', [SellerRegistrationController::class, 'create'])->name('seller.register');
+    Route::post('/become-seller', [SellerRegistrationController::class, 'store'])->name('seller.store');
+    Route::get('/seller-status', [SellerRegistrationController::class, 'status'])->name('seller.status');
+});
 
 // CRUD STOCK
 Route::middleware('auth')->group(function () {
@@ -125,3 +134,10 @@ Route::middleware('auth')
             'destroy'
         ])->name('produk.destroy');
     });
+
+// KHUSUS ADMIN: menyetujui / menolak pengajuan toko
+Route::middleware(['auth', 'role.admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/stores', [StoreApprovalController::class, 'index'])->name('stores.index');
+    Route::post('/stores/{store}/approve', [StoreApprovalController::class, 'approve'])->name('stores.approve');
+    Route::post('/stores/{store}/reject', [StoreApprovalController::class, 'reject'])->name('stores.reject');
+});

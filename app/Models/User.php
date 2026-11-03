@@ -10,9 +10,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // 🔴 PERBAIKAN MUTLAK: Beritahu Laravel bahwa primary key Anda adalah id_user
+    // Karena primary key Anda 'id_user', beritahu Laravel di sini:
     protected $primaryKey = 'id_user';
 
+    // Kolom apa saja yang boleh diisi (mass assignment)
     protected $fillable = [
         'nama',
         'email',
@@ -20,5 +21,20 @@ class User extends Authenticatable
         'role',
     ];
 
-    // ... sisa kode model User Anda ke bawah tetap biarkan ...
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    // Relasi ke tabel Stores (Toko Penjual)
+    public function store()
+    {
+        return $this->hasOne(Store::class, 'user_id', 'id_user');
+    }
+
+    // Helper untuk mengecek role
+    public function isSeller()
+    {
+        return $this->role === 'seller';
+    }
 }
